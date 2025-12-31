@@ -25,6 +25,7 @@ MATCHERS = [
     ("polars_bloom_jaccard", "Polars Bloom"),
     ("modular_pprl", "Modular PPRL"),
     ("rapidfuzz_matcher", "RapidFuzz"),
+    ("modernbert_matcher", "ModernBERT"),
 ]
 
 GOLDEN_RATIO = (5**0.5 - 1) / 2
@@ -116,6 +117,11 @@ result = modular_pprl_match(df_left, df_right, data["fields"], data["weights"], 
         code += f'''
 from matcher import rapidfuzz_match
 result = rapidfuzz_match(df_left, df_right, data["fields"], data["weights"], {threshold})
+'''
+    elif matcher_dir == "modernbert_matcher":
+        code += f'''
+from matcher import modernbert_match
+result = modernbert_match(df_left, df_right, data["fields"], data["weights"], {threshold})
 '''
     else:
         return set()

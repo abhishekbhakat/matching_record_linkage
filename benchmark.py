@@ -11,6 +11,7 @@ Compares:
 - blooms library (2025 replacement)
 - recordlinkage (stable Python toolkit)
 - Splink (industry standard, non-PPRL)
+- ModernBERT-Embed (semantic embeddings from Nomic AI)
 """
 
 import json
@@ -29,6 +30,7 @@ IMPLEMENTATIONS = [
     ("modular_pprl", "Modular PPRL (blooms+rl)"),
     ("splink_matcher", "Splink (unsupervised)"),
     ("rapidfuzz_matcher", "RapidFuzz (token_set)"),
+    ("modernbert_matcher", "ModernBERT-Embed (semantic)"),
 ]
 
 VALIDATION_DIR = SCRIPT_DIR / "validation"
@@ -127,6 +129,7 @@ def get_predictions(venv_path: Path, impl_dir: str, data_path: str, threshold: f
         "modular_pprl": "modular_pprl_match",
         "rapidfuzz_matcher": "rapidfuzz_match",
         "splink_matcher": "splink_match",
+        "modernbert_matcher": "modernbert_match",
     }
     
     func_name = func_map.get(impl_dir)

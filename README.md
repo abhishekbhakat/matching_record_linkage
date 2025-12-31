@@ -1,6 +1,6 @@
 # Matching Algorithm Benchmark
 
-Comparing **5 PPRL implementations** using isolated virtual environments against a 673-row validation dataset.
+Comparing **6 matching implementations** using isolated virtual environments against a 673-row validation dataset.
 
 ## Structure
 
@@ -13,13 +13,14 @@ MATCHING_TEST/
 ├── modular_pprl/                  # Modular PPRL (blooms+recordlinkage)
 ├── rapidfuzz_matcher/             # RapidFuzz (token_set similarity)
 ├── splink_matcher/                # Splink (unsupervised probabilistic)
+├── modernbert_matcher/            # ModernBERT-Embed (semantic, Nomic AI)
 └── validation/                    # Ground truth dataset (673 rows)
 ```
 
 ## Quick Start
 
 ```bash
-make setup              # Create isolated venvs for all 5 matchers
+make setup              # Create isolated venvs for all matchers
 make benchmark          # Run benchmark on validation dataset
 make benchmark-csv      # Run and save results to CSV
 make clean              # Remove venvs and cache
@@ -57,11 +58,12 @@ Lightweight implementation:
 
 | Matcher | Time | Matches | Precision | Recall | F1 |
 |---------|------|---------|-----------|--------|-----|
-| **CLKHash** | 0.15s | 552 | 0.71 | **0.84** | **0.77** |
-| **Polars Bloom** | **0.10s** | 511 | 0.72 | 0.79 | 0.75 |
-| Modular PPRL | 23.16s | 420 | 0.64 | 0.57 | 0.60 |
-| RapidFuzz | 0.44s | 665 | 0.58 | 0.82 | 0.68 |
-| Splink | 0.59s | 8 | 0.00 | 0.00 | 0.00 |
+| **CLKHash** | 0.16s | 552 | 0.71 | **0.84** | **0.77** |
+| **Polars Bloom** | **0.10s** | 514 | 0.72 | 0.79 | 0.75 |
+| ModernBERT-Embed | 9.82s | 525 | 0.69 | 0.77 | 0.73 |
+| RapidFuzz | 0.42s | 665 | 0.58 | 0.82 | 0.68 |
+| Modular PPRL | 22.84s | 420 | 0.64 | 0.57 | 0.60 |
+| Splink | 0.70s | 8 | 0.00 | 0.00 | 0.00 |
 
 **Winners:**
 - **Speed:** Polars Bloom (0.10s)
@@ -101,13 +103,18 @@ Each matcher has a `config.yaml` with tuned thresholds:
 |---------|----------|
 | CLKHash | 0.47 |
 | Polars Bloom | 0.46 |
+| ModernBERT-Embed | 0.83 |
+| RapidFuzz | 0.70 |
 | Modular PPRL | 0.57 |
 | Splink | 0.50 |
-| RapidFuzz | 0.70 |
+
+### ModernBERT-Embed
+
+Semantic embedding model from Nomic AI (Dec 2024). Uses cosine similarity on 768-dim embeddings. Can match abbreviations like `MIT ↔ Massachusetts Institute of Technology` that string-based matchers miss, but ~60x slower than CLKHash.
 
 ### Splink Note
 
-Splink is a probabilistic record linkage tool that requires EM training to estimate m/u parameters. Without proper training data, it produces very few matches. The current benchmark shows Splink's limitations when used without training - it's designed for large-scale deduplication where patterns can be learned from data.
+Splink is a probabilistic record linkage tool that requires EM training to estimate m/u parameters. Without proper training data, it produces very few matches.
 
 ## Important: Always Use `uv`
 

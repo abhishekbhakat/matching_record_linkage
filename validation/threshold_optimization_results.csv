@@ -43,3 +43,14 @@ threshold,f1,matches,matcher,precision,recall,optimal
 0.7089,0.6805,638,RapidFuzz,,,
 0.6977,0.6784,665,RapidFuzz,,,
 0.6998,0.6784,665,RapidFuzz,0.5774,0.8223,true
+0.4247,0.0025,377013,ModernBERT,,,
+0.6253,0.1276,6807,ModernBERT,,,
+0.7493,0.6725,800,ModernBERT,,,
+0.826,0.7262,530,ModernBERT,,,
+0.8734,0.6951,402,ModernBERT,,,
+0.7967,0.7213,595,ModernBERT,,,
+0.8441,0.7288,488,ModernBERT,,,
+0.8553,0.7198,461,ModernBERT,,,
+0.8372,0.729,507,ModernBERT,,,
+0.8329,0.7293,512,ModernBERT,,,
+0.835,0.7293,512,ModernBERT,0.6973,0.7645,true

@@ -1,0 +1,22 @@
+matcher:
+  name: modernbert_matcher
+  description: ModernBERT-Embed semantic embeddings from Nomic AI
+
+model:
+  name: nomic-ai/modernbert-embed-base
+  max_length: 512
+  dimension: 768
+
+thresholds:
+  default: 0.83
+  search_range:
+    - 0.5
+    - 0.6
+    - 0.7
+    - 0.8
+    - 0.9
+    - 0.95
+
+fields:
+  - name: name
+    weight: 1.0
