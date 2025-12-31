@@ -1,0 +1,25 @@
+matcher:
+  name: polars_bloom_jaccard
+  description: Pure Python Bloom filter with Polars and weighted Jaccard similarity
+
+bloom_filter:
+  size: 1024
+  bits_per_token: 5
+  ngram_size: 3
+
+thresholds:
+  default: 0.46
+  search_range:
+    - 0.1
+    - 0.2
+    - 0.3
+    - 0.4
+    - 0.5
+    - 0.6
+    - 0.7
+    - 0.8
+    - 0.9
+
+fields:
+  - name: name
+    weight: 1.0

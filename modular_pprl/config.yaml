@@ -1,0 +1,24 @@
+matcher:
+  name: modular_pprl
+  description: Modular PPRL using blooms library + Polars
+
+bloom_filter:
+  size: 1024
+  ngram_size: 2
+
+thresholds:
+  default: 0.57
+  search_range:
+    - 0.1
+    - 0.2
+    - 0.3
+    - 0.4
+    - 0.5
+    - 0.6
+    - 0.7
+    - 0.8
+    - 0.9
+
+fields:
+  - name: name
+    weight: 1.0

@@ -1,0 +1,4 @@
+polars==1.36.1
+bitarray==2.9.3
+clkhash==0.18.3
+setuptools==80.9.0
