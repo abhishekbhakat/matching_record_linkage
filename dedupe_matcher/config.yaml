@@ -1,0 +1,20 @@
+matcher:
+  name: dedupe_matcher
+  description: Active learning record linkage using dedupe library with pre-labeled training
+
+training:
+  pairs_file: training_pairs.csv
+  num_pairs: 40
+
+thresholds:
+  default: 0.6
+  search_range:
+    - 0.3
+    - 0.4
+    - 0.5
+    - 0.6
+  notes: "Dedupe outputs fixed score ~0.675 for all matches. Threshold must be <0.675 to get any results."
+
+fields:
+  - name: name
+    type: String

@@ -31,6 +31,7 @@ IMPLEMENTATIONS = [
     ("splink_matcher", "Splink (unsupervised)"),
     ("rapidfuzz_matcher", "RapidFuzz (token_set)"),
     ("modernbert_matcher", "ModernBERT-Embed (semantic)"),
+    ("dedupe_matcher", "Dedupe (active learning)"),
 ]
 
 VALIDATION_DIR = SCRIPT_DIR / "validation"
@@ -130,6 +131,7 @@ def get_predictions(venv_path: Path, impl_dir: str, data_path: str, threshold: f
         "rapidfuzz_matcher": "rapidfuzz_match",
         "splink_matcher": "splink_match",
         "modernbert_matcher": "modernbert_match",
+        "dedupe_matcher": "dedupe_match",
     }
     
     func_name = func_map.get(impl_dir)

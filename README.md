@@ -1,6 +1,6 @@
 # Matching Algorithm Benchmark
 
-Comparing **6 matching implementations** using isolated virtual environments against a 673-row validation dataset.
+Comparing **6 matching implementations** using isolated virtual environments against a 678-row validation dataset.
 
 ## Structure
 
@@ -14,7 +14,8 @@ MATCHING_TEST/
 ├── rapidfuzz_matcher/             # RapidFuzz (token_set similarity)
 ├── splink_matcher/                # Splink (unsupervised probabilistic)
 ├── modernbert_matcher/            # ModernBERT-Embed (semantic, Nomic AI)
-└── validation/                    # Ground truth dataset (673 rows)
+├── dedupe_matcher/                # Dedupe (active learning, supervised)
+└── validation/                    # Ground truth dataset (658 rows)
 ```
 
 ## Quick Start
@@ -53,21 +54,36 @@ Lightweight implementation:
 
 ## Benchmark Results
 
-**Dataset:** 673 rows, 452,929 comparisons  
-**Ground truth:** 467 true matches, 206 non-matches
+**Dataset:** 678 rows, 459,684 comparisons  
+**Ground truth:** 657 matches, 21 non-matches
 
-| Matcher | Time | Matches | Precision | Recall | F1 |
-|---------|------|---------|-----------|--------|-----|
-| **CLKHash** | 0.16s | 552 | 0.71 | **0.84** | **0.77** |
-| **Polars Bloom** | **0.10s** | 514 | 0.72 | 0.79 | 0.75 |
-| ModernBERT-Embed | 9.82s | 525 | 0.69 | 0.77 | 0.73 |
-| RapidFuzz | 0.42s | 665 | 0.58 | 0.82 | 0.68 |
-| Modular PPRL | 22.84s | 420 | 0.64 | 0.57 | 0.60 |
-| Splink | 0.70s | 8 | 0.00 | 0.00 | 0.00 |
+| Matcher | Threshold | Precision | Recall | F1 |
+|---------|-----------|-----------|--------|-----|
+| **ModernBERT-Embed** | 0.78 | 0.79 | **0.81** | **0.80** |
+| CLKHash | 0.41 | **0.79** | 0.77 | 0.78 |
+| RapidFuzz | 0.70 | 0.72 | 0.76 | 0.75 |
+| Polars Bloom | 0.42 | 0.77 | 0.71 | 0.74 |
+| Modular PPRL | 0.54 | 0.65 | 0.51 | 0.57 |
+| Splink | 0.50 | — | — | — |
 
 **Winners:**
-- **Speed:** Polars Bloom (0.10s)
-- **F1 Score:** CLKHash (0.77)
+- **F1 Score:** ModernBERT (0.80)
+- **Recall:** ModernBERT (0.81)
+- **Precision:** ModernBERT/CLKHash (0.79)
+
+### Production Viability
+
+With the updated ground truth (657 matches, 21 non-matches), **ModernBERT achieves ~79% precision** — reasonable for many use cases but may need human review for critical applications.
+
+**Non-match examples in ground truth:**
+- **Similar names:** "Michael Johnson" ≠ "Mitchell Johnson"
+- **Spelling variants:** "Sean Murphy" ≠ "Shawn Murphy"
+- **Different people:** "Emily Williams" ≠ "Emma Williams"
+
+**Recommendations for production:**
+1. Use ModernBERT or CLKHash as primary matcher (best F1)
+2. Add human review for borderline cases
+3. Consider ensemble approach for higher precision
 
 **Metrics:**
 - **Precision** = correct matches / predicted matches (higher = fewer false positives)
@@ -97,15 +113,15 @@ uv pip install -p .venvs/polars_bloom_jaccard -r polars_bloom_jaccard/requiremen
 
 ## Thresholds
 
-Each matcher has a `config.yaml` with tuned thresholds:
+Each matcher has a `config.yaml` with tuned thresholds (optimized via golden section search):
 
 | Matcher | Threshold |
 |---------|----------|
-| CLKHash | 0.47 |
-| Polars Bloom | 0.46 |
-| ModernBERT-Embed | 0.83 |
+| ModernBERT-Embed | 0.78 |
+| CLKHash | 0.41 |
+| Polars Bloom | 0.42 |
 | RapidFuzz | 0.70 |
-| Modular PPRL | 0.57 |
+| Modular PPRL | 0.54 |
 | Splink | 0.50 |
 
 ### ModernBERT-Embed

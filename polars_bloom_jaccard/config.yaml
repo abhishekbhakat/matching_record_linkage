@@ -5,10 +5,13 @@ matcher:
 bloom_filter:
   size: 1024
   bits_per_token: 5
-  ngram_size: 3
+  # Type-aware ngram sizes (matching CLKHash behavior)
+  ngram_string: 2    # For string fields (bigrams)
+  ngram_date: 3      # For date fields (trigrams)
+  ngram_integer: 3   # For integer fields (trigrams)
 
 thresholds:
-  default: 0.46
+  default: 0.42
   search_range:
     - 0.1
     - 0.2

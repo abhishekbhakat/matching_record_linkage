@@ -26,6 +26,7 @@ MATCHERS = [
     ("modular_pprl", "Modular PPRL"),
     ("rapidfuzz_matcher", "RapidFuzz"),
     ("modernbert_matcher", "ModernBERT"),
+    ("dedupe_matcher", "Dedupe"),
 ]
 
 GOLDEN_RATIO = (5**0.5 - 1) / 2
@@ -122,6 +123,11 @@ result = rapidfuzz_match(df_left, df_right, data["fields"], data["weights"], {th
         code += f'''
 from matcher import modernbert_match
 result = modernbert_match(df_left, df_right, data["fields"], data["weights"], {threshold})
+'''
+    elif matcher_dir == "dedupe_matcher":
+        code += f'''
+from matcher import dedupe_match
+result = dedupe_match(df_left, df_right, data["fields"], data["weights"], {threshold})
 '''
     else:
         return set()

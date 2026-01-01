@@ -2,17 +2,29 @@
 
 Recreates CLKHash's encoding without the unmaintained library dependency.
 Uses same algorithm: n-grams + double hashing + BitsPerTokenStrategy.
+Reads bloom filter parameters from config.yaml.
 """
 
 import hashlib
 import hmac
+from pathlib import Path
 
 import polars as pl
+import yaml
 from bitarray import bitarray
 
-BLOOM_SIZE = 1024
-BITS_PER_TOKEN = 5
-NGRAM_SIZE = 2
+# Load config
+CONFIG_PATH = Path(__file__).parent / "config.yaml"
+if CONFIG_PATH.exists():
+    with open(CONFIG_PATH) as f:
+        _config = yaml.safe_load(f)
+    BLOOM_SIZE = _config.get("bloom_filter", {}).get("size", 1024)
+    BITS_PER_TOKEN = _config.get("bloom_filter", {}).get("bits_per_token", 5)
+    NGRAM_SIZE = _config.get("bloom_filter", {}).get("ngram_size", 2)
+else:
+    BLOOM_SIZE = 1024
+    BITS_PER_TOKEN = 5
+    NGRAM_SIZE = 2
 SECRET = b"default_secret"
 
 
